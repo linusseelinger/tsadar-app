@@ -6,7 +6,7 @@ import streamlit as st
 import yaml, os
 from flatten_dict import flatten, unflatten
 
-from tsadar_gui import config
+from tsadar_gui import config  # , plot
 from tsadar import run_for_app
 
 
@@ -60,6 +60,11 @@ if __name__ == "__main__":
 
     elif mode == "gui":
         cfg = config.get_config()
+
+    if st.button("Preview"):
+        # not implemented
+        st.write("Preview not implemented yet")
+        # plot.plot_data()
 
     if st.button("Process"):
         # run and wait for the results
