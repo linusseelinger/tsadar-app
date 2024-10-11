@@ -221,18 +221,40 @@ def create_default_config():
             # shot day booolean
             "shotDay": st.checkbox("shotDay", value=False),
             "lineouts": {
-                "type": {"ps": st.selectbox("lineouts type", ["ps"])},
-                "start": st.number_input("lineouts start", value=800),
-                "end": st.number_input("lineouts end", value=3500),
-                "skip": st.number_input("lineouts skip", value=10),
+                "type": st.selectbox("lineouts type", ["pixel"]),
+                "start": st.number_input("lineouts start", value=500),
+                "end": st.number_input("lineouts end", value=510),
+                "skip": st.number_input("lineouts skip", value=1),
             },
             "background": {
-                "type": {"pixel": st.selectbox("background type", ["pixel"])},
+                "type": st.selectbox("background type", ["pixel"]),
                 "slice": st.number_input("background slice", value=900),
             },
             "probe_beam": st.selectbox("probe beam", ["P9"]),
+            "ele_t0": st.number_input("ele_t0", value=1500.0),
+            "ion_t0_shift": st.number_input("ion_t0_shift", value=900.0),
+            "dpixel": st.number_input("dpixel", value=3),
+            "bgscaleE": st.number_input("bgscaleE", value=1.0),
+            "bgscaleI": st.number_input("bgscaleI", value=0.1),
+            "launch_data_visualizer": st.checkbox("launch_data_visualizer", value=True),
+            "ele_lam_shift": st.number_input("ele_lam_shift", value=0.0),
+            "ion_loss_scale": st.number_input("ion_loss_scale", value=2.0),
         }
-
+        fit_rng = {
+            "blue_min": st.number_input("Blue Min", min_value=400, max_value=510, value=430),
+            "blue_max": st.number_input("Blue Max", min_value=400, max_value=510, value=510),
+            "red_min": st.number_input("Red Min", min_value=500, max_value=660, value=545),
+            "red_max": st.number_input("Red Max", min_value=500, max_value=660, value=660),
+            "iaw_min": st.number_input("IAW Min", min_value=500.0, max_value=530.0, value=525.5),
+            "iaw_max": st.number_input("IAW Max", min_value=500.0, max_value=530.0, value=527.5),
+            "iaw_cf_min": st.number_input("IAW CF Min", min_value=526.0, max_value=527.0, value=526.49),
+            "iaw_cf_max": st.number_input("IAW CF Max", min_value=526.0, max_value=527.0, value=526.51),
+            "forward_epw_start": st.number_input("Forward EPW Start", min_value=300, max_value=800, value=400),
+            "forward_epw_end": st.number_input("Forward EPW End", min_value=300, max_value=800, value=700),
+            "forward_iaw_start": st.number_input("Forward IAW Start", min_value=500.0, max_value=530.0, value=525.75),
+            "forward_iaw_end": st.number_input("Forward IAW End", min_value=500.0, max_value=530.0, value=527.25),
+        }
+        data["fit_rng"] = fit_rng
     with st.expander("Other"):
         other = {
             "extraoptions": {
@@ -254,6 +276,65 @@ def create_default_config():
             "refit": st.checkbox("refit", value=False),
             "refit_thresh": st.number_input("refit_thresh", value=5.0),
             "calc_sigmas": st.checkbox("calc_sigmas", value=False),
+            "CCDsize": st.number_input("CCD Size (uses same value for both dimensions)", value=1024),
+            "flatbg": st.checkbox("flatbg", value=False),
+            "gain": st.number_input("gain", value=1.0),
+            "points_per_pixel": st.number_input("points_per_pixel", value=1),
+            "iawoff": st.number_input("iawoff", value=0.0),
+        }
+        # Input as a comma-separated string
+        iawfilter_input = st.text_input("IAW Filter (comma-separated)", value="1, 4, 24, 528")
+
+        # Convert the input string into a list of integers
+        iawfilter = [int(i) for i in iawfilter_input.split(",")]
+        other["iawfilter"] = iawfilter
+
+        background_input = st.text_input("Background (comma-separated)", value="0, 0")
+        background = [int(i) for i in background_input.split(",")]
+
+        # Input for 'norm' as an integer value
+        norm = st.number_input("Norm", min_value=0, value=0)
+
+        # Creating the PhysParams dictionary
+        other["PhysParams"] = {"background": background, "norm": norm}
+
+        other["CCDsize"] = [other["CCDsize"], other["CCDsize"]]
+
+    with st.expander("Plotting"):
+        # Input for n_sigmas (integer)
+        n_sigmas = st.number_input("n_sigmas", min_value=0, value=3)
+
+        # Input for rolling_std_width (integer)
+        rolling_std_width = st.number_input("rolling_std_width", min_value=1, value=5)
+
+        # Input for data_cbar_u (string)
+        data_cbar_u = st.text_input("data_cbar_u", value="data")
+
+        # Input for data_cbar_l (integer)
+        data_cbar_l = st.number_input("data_cbar_l", min_value=0, value=0)
+
+        # Input for ion_window_start (integer)
+        ion_window_start = st.number_input("ion_window_start", min_value=500, max_value=530, value=525)
+
+        # Input for ion_window_end (integer)
+        ion_window_end = st.number_input("ion_window_end", min_value=500, max_value=530, value=528)
+
+        # Input for ele_window_start (integer)
+        ele_window_start = st.number_input("ele_window_start", min_value=400, max_value=700, value=425)
+
+        # Input for ele_window_end (integer)
+        ele_window_end = st.number_input("ele_window_end", min_value=400, max_value=700, value=660)
+
+        # Creating the plotting dictionary
+        plotting = {
+            "n_sigmas": n_sigmas,
+            "rolling_std_width": rolling_std_width,
+            "data_cbar_u": data_cbar_u,
+            "data_cbar_l": data_cbar_l,
+            "ion_window_start": ion_window_start,
+            "ion_window_end": ion_window_end,
+            "ele_window_start": ele_window_start,
+            "ele_window_end": ele_window_end,
         }
 
     with st.expander("Mlflow"):
@@ -265,4 +346,11 @@ def create_default_config():
 
     with st.expander("Optimizer"):
         optimizer = optimizer_section()
-    return {"parameters": parameters, "data": data, "other": other, "mlflow": mlflow, "optimizer": optimizer}
+    return {
+        "parameters": parameters,
+        "data": data,
+        "other": other,
+        "mlflow": mlflow,
+        "optimizer": optimizer,
+        "plotting": plotting,
+    }
