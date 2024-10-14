@@ -17,10 +17,11 @@ def process_file(file_path):
 
 if __name__ == "__main__":
     st.title("Thomson Scattering Analysis")
-    st.sidebar.title("Thomson Scattering Analysis")
+    st.sidebar.title("TSADARapp")
 
     # select box between forward and fit
-    mode = st.sidebar.selectbox("How are you providing the configuration options?", ["file", "gui"])
+    # mode = st.sidebar.selectbox("How are you providing the configuration options?", ["file", "gui"])
+    mode = st.sidebar.selectbox("Where to?", ["Home", "Fit"])
 
     config_dir = os.path.join(os.getcwd(), "temp")
 
@@ -57,25 +58,37 @@ if __name__ == "__main__":
         #     iaw_file = iaw_file.name
         #     with open(iaw_file.name, "wb") as f:
         #         f.write(iaw_file.getvalue())
+    elif mode == "Home":
+        st.header("Welcome to TSADARapp")
+        st.write(
+            "This web app is a Streamlit implementation of the [Thomson Scattering Analysis](https://www.github.com/ergodicio/inverse-thomson-scattering/) software [1]."
+        )
+        st.write(
+            "The software is designed to analyze Thomson scattering data to extract electron and ion temperatures and densities."
+        )
 
-    elif mode == "gui":
+    elif mode == "Fit":
         cfg = config.get_config()
 
-    if st.button("Preview"):
-        # not implemented
-        st.write("Preview not implemented yet")
-        # plot.plot_data()
+        c1, c2 = st.columns(2)
 
-    if st.button("Process"):
-        # run and wait for the results
-        run_id = run_for_app(cfg, mode="fit")
+        with c1:
+            if st.button("Preview"):
+                # not implemented
+                st.write("Preview not implemented yet")
+                # plot.plot_data()
 
-        st.write(f"The results can be found at the mlflow run id {run_id}")
+        with c2:
+            if st.button("Fit"):
+                # run and wait for the results
+                run_id = run_for_app(cfg, mode="fit")
+
+                st.write(f"The results can be found at the mlflow run id {run_id}")
 
     st.sidebar.title("About")
     ## Add attribution
     st.sidebar.markdown(
-        "This app is a Streamlit implementation of the Thomson Scattering Analysis software published in ref [1]"
+        "This web app is a Streamlit implementation of the [Thomson Scattering Analysis](https://www.github.com/ergodicio/inverse-thomson-scattering/) software [1]."
     )
     # add ref 1
     st.sidebar.markdown(
