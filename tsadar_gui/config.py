@@ -157,6 +157,7 @@ def get_species2():
         Ti_val = st.number_input("Initial value of Ti", value=0.2)
         Ti_lb = st.number_input("Lower bound for Ti", value=0.01)
         Ti_ub = st.number_input("Upper bound for Ti", value=1.5)
+        Ti_same = st.checkbox("Same Ti?", value=False)
 
     with c2:
         _c1, _c2 = st.columns(2)
@@ -178,6 +179,8 @@ def get_species2():
         with _c2:
             A_active = st.checkbox("Fit A?", value=True)
         A_val = st.number_input("Initial value of A", value=40.0)
+        A_lb = st.number_input("Lower bound for A", value=1.0)
+        A_ub = st.number_input("Upper bound for A", value=100.0)
 
     with c2:
         _c1, _c2 = st.columns(2)
@@ -186,6 +189,8 @@ def get_species2():
         with _c2:
             fract_active = st.checkbox("Fit fract?", value=True)
         fract_val = st.number_input("Initial value of fract", value=1.0)
+        fract_lb = st.number_input("Lower bound for fract", value=0.0)
+        fract_ub = st.number_input("Upper bound for fract", value=1.0)
 
     species2 = {
         "type": {
@@ -197,6 +202,7 @@ def get_species2():
             "active": Ti_active,
             "lb": Ti_lb,
             "ub": Ti_ub,
+            "same": Ti_same,
         },
         "Z": {
             "val": Z_val,
@@ -207,10 +213,14 @@ def get_species2():
         "A": {
             "val": A_val,
             "active": A_active,
+            "lb": A_lb,
+            "ub": A_ub,
         },
         "fract": {
             "val": fract_val,
             "active": fract_active,
+            "lb": fract_lb,
+            "ub": fract_ub,
         },
     }
 
@@ -218,66 +228,6 @@ def get_species2():
 
 
 def get_general():
-    # general = {
-    #     "type": {
-    #         "general": st.selectbox("general type", ["general"]),
-    #         "active": st.checkbox("general type active", value=False),
-    #     },
-    #     "amp1": {
-    #         "val": st.number_input("amp1 val", value=1.0),
-    #         "active": st.checkbox("amp1 active", value=True),
-    #         "lb": st.number_input("amp1 lb", value=0.01),
-    #         "ub": st.number_input("amp1 ub", value=3.75),
-    #     },
-    #     "amp2": {
-    #         "val": st.number_input("amp2 val", value=1.0),
-    #         "active": st.checkbox("amp2 active", value=True),
-    #         "lb": st.number_input("amp2 lb", value=0.01),
-    #         "ub": st.number_input("amp2 ub", value=3.75),
-    #     },
-    #     "amp3": {
-    #         "val": st.number_input("amp3 val", value=1.0),
-    #         "active": st.checkbox("amp3 active", value=False),
-    #         "lb": st.number_input("amp3 lb", value=0.01),
-    #         "ub": st.number_input("amp3 ub", value=3.75),
-    #     },
-    #     "lam": {
-    #         "val": st.number_input("lam val", value=526.5),
-    #         "active": st.checkbox("lam active", value=False),
-    #         "lb": st.number_input("lam lb", value=523.0),
-    #         "ub": st.number_input("lam ub", value=528.0),
-    #     },
-    #     "Te_gradient": {
-    #         "val": st.number_input("Te_gradient val", value=0.0),
-    #         "active": st.checkbox("Te_gradient active", value=False),
-    #         "lb": st.number_input("Te_gradient lb", value=0.0),
-    #         "ub": st.number_input("Te_gradient ub", value=10.0),
-    #         "num_grad_points": st.number_input("Te_gradient num_grad_points", value=1),
-    #     },
-    #     "ne_gradient": {
-    #         "val": st.number_input("ne_gradient val", value=0.0),
-    #         "active": st.checkbox("ne_gradient active", value=False),
-    #         "lb": st.number_input("ne_gradient lb", value=0.0),
-    #         "ub": st.number_input("ne_gradient ub", value=15.0),
-    #         "num_grad_points": st.number_input("ne_gradient num_grad_points", value=1),
-    #     },
-    #     "ud": {
-    #         "val": st.number_input("ud val", value=0.0),
-    #         "angle": st.number_input("ud angle", value=0.0),
-    #         "active": st.checkbox("ud active", value=False),
-    #         "lb": st.number_input("ud lb", value=-10.0),
-    #         "ub": st.number_input("ud ub", value=10.0),
-    #     },
-    #     "Va": {
-    #         "val": st.number_input("Va val", value=0.0),
-    #         "angle": st.number_input("Va angle", value=0.0),
-    #         "active": st.checkbox("Va active", value=False),
-    #         "lb": st.number_input("Va lb", value=-20.5),
-    #         "ub": st.number_input("Va ub", value=20.5),
-    #     },
-    # }
-
-    # extract the inline dictionary creation that follows to individual streamlit calls formatted using the column structure from the previous function
     st.divider()
     c1, c2, c3 = st.columns(3)
     with c1:
@@ -449,46 +399,6 @@ def create_default_config():
     }
 
     with st.expander("Data"):
-        # data = {
-        #     "shotnum": st.number_input("shotnum", value=101675),
-        #     # shot day booolean
-        #     "shotDay": st.checkbox("shotDay", value=False),
-        #     "lineouts": {
-        #         "type": st.selectbox("lineouts type", ["pixel"]),
-        #         "start": st.number_input("lineouts start", value=500),
-        #         "end": st.number_input("lineouts end", value=510),
-        #         "skip": st.number_input("lineouts skip", value=1),
-        #     },
-        #     "background": {
-        #         "type": st.selectbox("background type", ["pixel"]),
-        #         "slice": st.number_input("background slice", value=900),
-        #     },
-        #     "probe_beam": st.selectbox("probe beam", ["P9"]),
-        #     "ele_t0": st.number_input("ele_t0", value=1500.0),
-        #     "ion_t0_shift": st.number_input("ion_t0_shift", value=900.0),
-        #     "dpixel": st.number_input("dpixel", value=3),
-        #     "bgscaleE": st.number_input("bgscaleE", value=1.0),
-        #     "bgscaleI": st.number_input("bgscaleI", value=0.1),
-        #     "launch_data_visualizer": st.checkbox("launch_data_visualizer", value=True),
-        #     "ele_lam_shift": st.number_input("ele_lam_shift", value=0.0),
-        #     "ion_loss_scale": st.number_input("ion_loss_scale", value=2.0),
-        # }
-        # fit_rng = {
-        #     "blue_min": st.number_input("Blue Min", min_value=400, max_value=510, value=430),
-        #     "blue_max": st.number_input("Blue Max", min_value=400, max_value=510, value=510),
-        #     "red_min": st.number_input("Red Min", min_value=500, max_value=660, value=545),
-        #     "red_max": st.number_input("Red Max", min_value=500, max_value=660, value=660),
-        #     "iaw_min": st.number_input("IAW Min", min_value=500.0, max_value=530.0, value=525.5),
-        #     "iaw_max": st.number_input("IAW Max", min_value=500.0, max_value=530.0, value=527.5),
-        #     "iaw_cf_min": st.number_input("IAW CF Min", min_value=526.0, max_value=527.0, value=526.49),
-        #     "iaw_cf_max": st.number_input("IAW CF Max", min_value=526.0, max_value=527.0, value=526.51),
-        #     "forward_epw_start": st.number_input("Forward EPW Start", min_value=300, max_value=800, value=400),
-        #     "forward_epw_end": st.number_input("Forward EPW End", min_value=300, max_value=800, value=700),
-        #     "forward_iaw_start": st.number_input("Forward IAW Start", min_value=500.0, max_value=530.0, value=525.75),
-        #     "forward_iaw_end": st.number_input("Forward IAW End", min_value=500.0, max_value=530.0, value=527.25),
-        # }
-        # data["fit_rng"] = fit_rng
-
         # extract the inline dictionary creation from the previous code to individual streamlit calls formatted using the column structure from the previous function
         c1, c2 = st.columns(2)
         with c1:
