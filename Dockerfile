@@ -10,7 +10,8 @@ EXPOSE 8501
 
 # install pip then packages 
 
-RUN pip3 install --upgrade pip
+RUN mamba create -n tsadar_app python=3.12
+RUN mamba activate tsadar_app
 RUN mamba install -y -c pyhdf
 RUN pip3 install -r requirements.txt
 
