@@ -5,8 +5,8 @@ COPY requirements.txt .
 COPY tsadar_app.py .
 
 EXPOSE 8501
-# install git
-RUN apt-get update && apt-get install -y git
+# install git and gcc
+RUN apt-get update && apt-get install -y git gcc
 
 # install pip then packages 
 
