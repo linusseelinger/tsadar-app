@@ -1,5 +1,5 @@
 # base image
-FROM mambaorg:micromamba
+FROM mambaorg/micromamba:latest
 
 COPY requirements.txt .
 COPY tsadar_app.py .
