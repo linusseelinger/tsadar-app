@@ -19,7 +19,7 @@ def optimizer_section():
         "y_norm": st.checkbox("Normalize y", value=True),
         "x_norm": st.checkbox("Normalize x", value=False),
         "grad_method": st.selectbox("Gradient method", ["AD", "FD", "Other"], index=0),
-        "batch_size": st.number_input("Batch size", value=6, min_value=1, step=1),
+        "batch_size": st.number_input("Batch size", value=2, min_value=1, step=1),
         "num_epochs": st.number_input("Number of epochs", value=500, min_value=1, step=1),
         "learning_rate": st.number_input("Learning rate", value=1.0e-4, format="%.5e"),
         "parameter_norm": st.checkbox("Parameter normalization", value=True),
@@ -177,10 +177,10 @@ def get_species2():
         # with _c1:
         st.write("Ion Mass")
         # with _c2:
-        #     A_active = False
+        A_active = False
         A_val = st.number_input("Value of A", value=40.0)
-        # A_lb = st.number_input("Lower bound for A", value=1.0)
-        # A_ub = st.number_input("Upper bound for A", value=100.0)
+        A_lb = 1.0
+        A_ub = 100.0
 
     with c2:
         _c1, _c2 = st.columns(2)
@@ -267,7 +267,7 @@ def get_general():
         with _c1:
             st.write("Lambda")
         with _c2:
-            lam_active = st.checkbox("Fit Lambda?", value=False)
+            lam_active = st.checkbox("Fit Lambda?", value=True)
         lam_val = st.number_input("Initial value of Lambda", value=526.5)
         lam_lb = st.number_input("Lower bound for Lambda", value=523.0)
         lam_ub = st.number_input("Upper bound for Lambda", value=528.0)
@@ -407,9 +407,9 @@ def create_default_config():
             st.divider()
             st.write("Which lineouts?")
             lineout_type = st.selectbox("lineouts type", ["pixel"])
-            lineout_start = st.number_input("lineouts start", value=500)
-            lineout_end = st.number_input("lineouts end", value=510)
-            lineout_skip = st.number_input("lineouts skip", value=1)
+            lineout_start = st.number_input("lineouts start", value=400)
+            lineout_end = st.number_input("lineouts end", value=600)
+            lineout_skip = st.number_input("lineouts skip", value=5)
             st.divider()
             probe_beam = st.selectbox("Probe Beam", ["P9"])
         with c2:
