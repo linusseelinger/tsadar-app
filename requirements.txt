@@ -1,2 +1,2 @@
-inverse-thomson-scattering
+git+https://github.com/ergodicio/tsadar.git
 streamlit

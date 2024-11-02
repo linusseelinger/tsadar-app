@@ -173,14 +173,14 @@ def get_species2():
 
     c1, c2 = st.columns(2)
     with c1:
-        _c1, _c2 = st.columns(2)
-        with _c1:
-            st.write("Ion Mass")
-        with _c2:
-            A_active = st.checkbox("Fit A?", value=True)
-        A_val = st.number_input("Initial value of A", value=40.0)
-        A_lb = st.number_input("Lower bound for A", value=1.0)
-        A_ub = st.number_input("Upper bound for A", value=100.0)
+        # _c1, _c2 = st.columns(2)
+        # with _c1:
+        st.write("Ion Mass")
+        # with _c2:
+        #     A_active = False
+        A_val = st.number_input("Value of A", value=40.0)
+        # A_lb = st.number_input("Lower bound for A", value=1.0)
+        # A_ub = st.number_input("Upper bound for A", value=100.0)
 
     with c2:
         _c1, _c2 = st.columns(2)
