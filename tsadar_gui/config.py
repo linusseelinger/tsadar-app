@@ -45,7 +45,7 @@ def get_species1():
             st.write("Electron Temperature")
         with _c2:
             Te_active = st.checkbox("Fit Te?", value=True)
-        Te_val = st.number_input("Initial value of Te", value=0.2)
+        Te_val = st.number_input("Initial value of Te", value=0.5)
         Te_lb = st.number_input("Lower bound for Te", value=0.01)
         Te_ub = st.number_input("Upper bound for Te", value=1.5)
 
@@ -55,7 +55,7 @@ def get_species1():
             st.write("Electron Density")
         with _c2:
             ne_active = st.checkbox("Fit ne?", value=True)
-        ne_val = st.number_input("Initial value of ne", value=0.08)
+        ne_val = st.number_input("Initial value of ne", value=0.2)
 
         ne_lb = st.number_input("Lower bound for ne", value=0.03)
         ne_ub = st.number_input("Upper bound for ne", value=1.0)
@@ -67,7 +67,7 @@ def get_species1():
         with _c1:
             st.write("Species Super Gaussian index")
         with _c2:
-            m_active = st.checkbox("Fit m?", value=False)
+            m_active = st.checkbox("Fit m?", value=True)
 
         # st.write("Species Super Gaussian index")
         m_val = st.number_input("Initial m", value=2.0)
@@ -153,7 +153,7 @@ def get_species2():
         with _c1:
             st.write("Ion Temperature")
         with _c2:
-            Ti_active = st.checkbox("Fit Ti?", value=True)
+            Ti_active = st.checkbox("Fit Ti?", value=False)
         Ti_val = st.number_input("Initial value of Ti", value=0.2)
         Ti_lb = st.number_input("Lower bound for Ti", value=0.01)
         Ti_ub = st.number_input("Upper bound for Ti", value=1.5)
@@ -164,7 +164,7 @@ def get_species2():
         with _c1:
             st.write("Ion Charge")
         with _c2:
-            Z_active = st.checkbox("Fit Z?", value=True)
+            Z_active = st.checkbox("Fit Z?", value=False)
         Z_val = st.number_input("Initial value of Z", value=10.0)
         Z_lb = st.number_input("Lower bound for Z", value=1.0)
         Z_ub = st.number_input("Upper bound for Z", value=18.0)
@@ -187,7 +187,7 @@ def get_species2():
         with _c1:
             st.write("Ion Fraction")
         with _c2:
-            fract_active = st.checkbox("Fit fract?", value=True)
+            fract_active = st.checkbox("Fit fract?", value=False)
         fract_val = st.number_input("Initial value of fract", value=1.0)
         fract_lb = st.number_input("Lower bound for fract", value=0.0)
         fract_ub = st.number_input("Upper bound for fract", value=1.0)
