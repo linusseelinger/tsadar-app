@@ -18,7 +18,7 @@ EXPOSE 8501
 # RUN mamba install -y -c pyhdf
 # RUN pip3 install -r requirements.txt
 
-CMD streamlit run tsadar.py \
+CMD micromamba run -n base streamlit run tsadar.py \
     --server.headless=true \
     --browser.serverAddress="0.0.0.0" \
     --server.port=8501 \
