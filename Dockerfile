@@ -2,7 +2,7 @@
 FROM python:3.12-slim
 
 COPY requirements.txt .
-COPY stapp.py .
+COPY tsadar_app.py .
 
 EXPOSE 8501
 
