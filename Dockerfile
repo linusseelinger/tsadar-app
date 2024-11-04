@@ -1,7 +1,10 @@
 # base image
 FROM mambaorg/micromamba:latest
 
-COPY --chown=$MAMBA_USER:$MAMBA_USER requirements.txt mambaenv.yaml tsadar_app.py tsadar_gui .
+WORKDIR /app
+
+COPY --chown=$MAMBA_USER:$MAMBA_USER tsadar_gui /app/tsadar_gui
+COPY --chown=$MAMBA_USER:$MAMBA_USER tsadar_app.py /app/
 
 RUN micromamba install -y -n base -f mambaenv.yaml && \
     micromamba clean --all --yes

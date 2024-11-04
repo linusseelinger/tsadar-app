@@ -6,7 +6,7 @@ import streamlit as st
 import yaml, os
 from flatten_dict import flatten, unflatten
 
-from tsadar_gui import config  # , plot
+from tsadar_gui import config
 from tsadar import run_for_app
 
 
