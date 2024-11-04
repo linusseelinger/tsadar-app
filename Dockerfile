@@ -16,4 +16,4 @@ CMD micromamba run -n base streamlit run /app/tsadar_app.py \
     --browser.serverAddress="0.0.0.0" \
     --server.port=8501 \
     --browser.gatherUsageStats=false \
-    --server.baseUrlPath="/thomson"
+    --server.baseUrlPath="/tsadar"
