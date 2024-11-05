@@ -426,7 +426,7 @@ def create_default_config():
             ion_loss_scale = st.number_input("ion_loss_scale", value=2.0)
 
         st.divider()
-        st.write("What should we call these?")
+        st.write("Spectral Fitting Range")
         c1, c2 = st.columns(2)
         with c1:
             blue_min = st.number_input("Blue Min", min_value=400, max_value=510, value=430)
