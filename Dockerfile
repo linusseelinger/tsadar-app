@@ -1,18 +1,19 @@
 # base image
-FROM python:3.12-slim
+FROM mambaorg/micromamba:latest
 
-COPY requirements.txt .
-COPY stapp.py .
+WORKDIR /app
+
+COPY --chown=$MAMBA_USER:$MAMBA_USER tsadar_gui /app/tsadar_gui
+COPY --chown=$MAMBA_USER:$MAMBA_USER mambaenv.yaml tsadar_app.py /app/
+
+RUN micromamba install -y -n base -f /app/mambaenv.yaml && \
+    micromamba clean --all --yes
 
 EXPOSE 8501
 
-# install pip then packages
-RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements.txt
-
-CMD streamlit run tsadar.py \
+CMD micromamba run -n base streamlit run /app/tsadar_app.py \
     --server.headless=true \
     --browser.serverAddress="0.0.0.0" \
     --server.port=8501 \
     --browser.gatherUsageStats=false \
-    --server.baseUrlPath="/thomson"
+    --server.baseUrlPath="/tsadar"
