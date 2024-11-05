@@ -3,7 +3,7 @@ from jax import config
 config.update("jax_enable_x64", True)
 
 import streamlit as st
-import yaml, os
+import yaml, os, mlflow
 from flatten_dict import flatten, unflatten
 
 from tsadar_gui import config
@@ -81,6 +81,7 @@ if __name__ == "__main__":
         with c2:
             if st.button("Fit"):
                 # run and wait for the results
+                mlflow.set_experiment(cfg["mlflow"]["experiment"])
                 run_id = run_for_app(cfg, mode="fit")
 
                 st.write(f"The results can be found at the mlflow run id {run_id}")
