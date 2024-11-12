@@ -3,7 +3,7 @@ from jax import config
 config.update("jax_enable_x64", True)
 
 import streamlit as st
-import yaml, os, mlflow
+import yaml, os, mlflow, tempfile
 from flatten_dict import flatten, unflatten
 
 from tsadar_gui import config
@@ -47,17 +47,6 @@ if __name__ == "__main__":
         defaults.update(flatten(inps))
         cfg = unflatten(defaults)
 
-        # epw_file = st.file_uploader("Upload the EPW data file", type=["hdf", "txt"])
-        # if epw_file:
-        #     epw_file_path = epw_file.name
-        #     with open(epw_file.name, "wb") as f:
-        #         f.write(epw_file.getvalue())
-
-        # iaw_file = st.file_uploader("Upload the IAW data file", type=["hdf", "txt"])
-        # if iaw_file:
-        #     iaw_file = iaw_file.name
-        #     with open(iaw_file.name, "wb") as f:
-        #         f.write(iaw_file.getvalue())
     elif mode == "Home":
         st.header("Welcome to TSADARapp")
         st.write(
@@ -68,7 +57,7 @@ if __name__ == "__main__":
         )
 
     elif mode == "Fit":
-        cfg = config.get_config()
+        cfg, files = config.get_config()
 
         c1, c2 = st.columns(2)
 
@@ -82,9 +71,26 @@ if __name__ == "__main__":
             if st.button("Fit"):
                 # run and wait for the results
                 mlflow.set_experiment(cfg["mlflow"]["experiment"])
-                run_id = run_for_app(cfg, mode="fit")
 
-                st.write(f"The results can be found at the mlflow run id {run_id}")
+                with tempfile.TemporaryDirectory() as tempdir:
+                    with mlflow.start_run(run_name=cfg["mlflow"]["run"], log_system_metrics=True) as mlflow_run:
+                        # write config yaml to disk
+                        with open(os.path.join(tempdir, "config.yaml"), "w") as f:
+                            yaml.dump(cfg, f)
+
+                        # write uploaded streamlit file to disk
+                        for k, fl in files.items():
+                            with open(os.path.join(tempdir, fl.name), "wb") as f:
+                                f.write(fl.read())
+
+                        mlflow.log_artifacts(tempdir)
+                        run_id = mlflow_run.info.run_id
+
+                st.write(
+                    f"The job is queued. The status and results can be found at the mlflow experiment {cfg["mlflow"]["experiment"]} and run id {run_id}. Email support@ergodic.io if you have any trouble."
+                )
+
+                run_for_app(run_id)
 
     st.sidebar.title("About")
     ## Add attribution
