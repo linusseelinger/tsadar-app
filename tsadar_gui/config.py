@@ -598,9 +598,15 @@ def create_default_config():
     }
 
     if epw_file is not None:
-        config["data"]["filenames"]["epw"] = epw_file.name
+        if str(config["data"]["shotnum"]) in epw_file.name:
+            config["data"]["filenames"]["epw"] = epw_file.name
+        else:
+            st.error("The EPW file name does not match the shot number")
 
     if iaw_file is not None:
-        config["data"]["filenames"]["iaw"] = iaw_file.name
+        if str(config["data"]["shotnum"]) in iaw_file.name:
+            config["data"]["filenames"]["iaw"] = iaw_file.name
+        else:
+            st.error("The IAW file name does not match the shot number")
 
     return config, files
