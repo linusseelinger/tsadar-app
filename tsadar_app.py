@@ -82,7 +82,7 @@ if __name__ == "__main__":
                 }
                 submissionResult = client.submit_job(**job_template)
                 st.write(
-                    f"The job is queued. The status and results can be found at the mlflow experiment {cfg["mlflow"]["experiment"]} and run id {run_id}. Email support@ergodic.io if you have any trouble."
+                    f"The job is queued. The status and results can be found at the mlflow experiment {cfg['mlflow']['experiment']} and run id {run_id}. Email support@ergodic.io if you have any trouble."
                 )
 
                 # run_for_app(run_id)
