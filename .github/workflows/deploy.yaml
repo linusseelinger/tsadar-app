@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - feature/upload-data
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,7 +35,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: continuum
-          IMAGE_TAG: latest-tsadar
+          IMAGE_TAG: tsadar-app-v0.0.1
         run: |
           docker build -f Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 

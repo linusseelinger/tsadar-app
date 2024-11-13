@@ -7,9 +7,9 @@ def get_config():
     )
     st.write("More details can be found in the documentation at < >")
 
-    config = create_default_config()
+    config, files = create_default_config()
     # inputs = get_inputs()
-    return config
+    return config, files
 
 
 def optimizer_section():
@@ -403,6 +403,15 @@ def create_default_config():
         c1, c2 = st.columns(2)
         with c1:
             shotnum = st.number_input("shotnum", value=101675)
+            # file upload
+            files = {}
+            epw_file = st.file_uploader("Upload the EPW file", type=["hdf"])
+            if epw_file:
+                files["epw"] = epw_file
+            iaw_file = st.file_uploader("Upload the IAW file", type=["hdf"])
+            if iaw_file:
+                files["iaw"] = iaw_file
+
             shotDay = st.checkbox("shotDay", value=False)
             st.divider()
             st.write("Which lineouts?")
@@ -447,6 +456,7 @@ def create_default_config():
         data = {
             "shotnum": shotnum,
             "shotDay": shotDay,
+            "filenames": {},
             "lineouts": {
                 "type": lineout_type,
                 "start": lineout_start,
@@ -577,7 +587,8 @@ def create_default_config():
 
     with st.expander("Optimizer"):
         optimizer = optimizer_section()
-    return {
+
+    config = {
         "parameters": parameters,
         "data": data,
         "other": other,
@@ -585,3 +596,17 @@ def create_default_config():
         "optimizer": optimizer,
         "plotting": plotting,
     }
+
+    if epw_file is not None:
+        if str(config["data"]["shotnum"]) in epw_file.name:
+            config["data"]["filenames"]["epw"] = epw_file.name
+        else:
+            st.error("The EPW file name does not match the shot number")
+
+    if iaw_file is not None:
+        if str(config["data"]["shotnum"]) in iaw_file.name:
+            config["data"]["filenames"]["iaw"] = iaw_file.name
+        else:
+            st.error("The IAW file name does not match the shot number")
+
+    return config, files
