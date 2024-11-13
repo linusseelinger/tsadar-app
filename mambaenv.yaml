@@ -4,11 +4,11 @@ channels:
 dependencies:
   - python=3.10
   - pip
-  - mlflow
-  - numpy
-  - streamlit
-  - boto3
-  - protobuf==3.20.*
 # install pip requirements
-  # - pip:
+  - pip:
+    - mlflow
+    - numpy
+    - streamlit
+    - boto3
+    - protobuf==3.20.*
     # - git+https://github.com/ergodicio/tsadar.git
