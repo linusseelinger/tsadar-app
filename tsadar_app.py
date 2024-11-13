@@ -47,7 +47,7 @@ if __name__ == "__main__":
                 mlflow.set_experiment(cfg["mlflow"]["experiment"])
 
                 with tempfile.TemporaryDirectory() as tempdir:
-                    with mlflow.start_run(run_name=cfg["mlflow"]["run"], log_system_metrics=True) as mlflow_run:
+                    with mlflow.start_run(run_name=cfg["mlflow"]["run"]) as mlflow_run:
                         # write config yaml to disk
                         with open(os.path.join(tempdir, "config.yaml"), "w") as f:
                             yaml.dump(cfg, f)
