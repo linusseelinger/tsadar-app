@@ -5,8 +5,10 @@ dependencies:
   - python=3.12
   - git
   - pip
-  - pyhdf
+  - mlflow
+  - numpy
   - streamlit
+  - boto3
 # install pip requirements
-  - pip:
-    - git+https://github.com/ergodicio/tsadar.git
+  # - pip:
+    # - git+https://github.com/ergodicio/tsadar.git

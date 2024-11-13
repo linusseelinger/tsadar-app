@@ -3,11 +3,9 @@ from jax import config
 config.update("jax_enable_x64", True)
 
 import streamlit as st
-import yaml, os, mlflow, tempfile
-from flatten_dict import flatten, unflatten
+import yaml, os, mlflow, tempfile, boto3
 
 from tsadar_gui import config
-from tsadar import run_for_app
 
 
 def process_file(file_path):
@@ -26,28 +24,8 @@ if __name__ == "__main__":
     config_dir = os.path.join(os.getcwd(), "temp")
 
     os.makedirs(config_dir, exist_ok=True)
-    if mode == "file":
-        defaults = st.file_uploader("Upload the defaults file", type=["yaml", "yml"])
-        if defaults:
-            with open(os.path.join(config_dir, defaults.name), "wb") as f:
-                f.write(defaults.getvalue())
 
-        inputs = st.file_uploader("Upload the inputs file", type=["yaml", "yml"])
-        if inputs:
-            with open(os.path.join(config_dir, inputs.name), "wb") as f:
-                f.write(inputs.getvalue())
-
-        with open(os.path.join(config_dir, "defaults.yaml"), "r") as f:
-            defs = yaml.safe_load(f)
-
-        with open(os.path.join(config_dir, "inputs.yaml"), "r") as f:
-            inps = yaml.safe_load(f)
-
-        defaults = flatten(defs)
-        defaults.update(flatten(inps))
-        cfg = unflatten(defaults)
-
-    elif mode == "Home":
+    if mode == "Home":
         st.header("Welcome to TSADARapp")
         st.write(
             "This web app is a Streamlit implementation of the [Thomson Scattering Analysis](https://www.github.com/ergodicio/inverse-thomson-scattering/) software [1]."
@@ -86,11 +64,28 @@ if __name__ == "__main__":
                         mlflow.log_artifacts(tempdir)
                         run_id = mlflow_run.info.run_id
 
+                # requests.post(
+                #     "http://sciapi.continuum/queue-run",
+                #     data={"jq_nm": "gpu", "jd_nm": "gpu", "job_name": "thomson", "run_type": "dm", "run_id": run_id},
+                # )
+                client = boto3.client("batch", region_name="us-east-1")
+
+                job_template = {
+                    "jobQueue": "gpu",
+                    "jobDefinition": "tsadar-gpu",
+                    "jobName": "tsadar",
+                    "parameters": {"run_id": run_id},
+                    "retryStrategy": {
+                        "attempts": 10,
+                        "evaluateOnExit": [{"action": "RETRY", "onStatusReason": "Host EC2*"}],
+                    },
+                }
+                submissionResult = client.submit_job(**job_template)
                 st.write(
                     f"The job is queued. The status and results can be found at the mlflow experiment {cfg["mlflow"]["experiment"]} and run id {run_id}. Email support@ergodic.io if you have any trouble."
                 )
 
-                run_for_app(run_id)
+                # run_for_app(run_id)
 
     st.sidebar.title("About")
     ## Add attribution
