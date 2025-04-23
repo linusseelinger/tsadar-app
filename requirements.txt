@@ -1,4 +1,5 @@
-mlflow
-numpy
+git+https://github.com/ergodicio/tsadar.git
 streamlit
 boto3
+mlflow
+numpy
